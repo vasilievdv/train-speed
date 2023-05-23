@@ -1,8 +1,8 @@
-import { AllSpeedsState } from '../types';
+import { AllSpeedsState, SpeedsForTrain } from '../types';
 
 export const addAllSpeedsReducer = (
   state: AllSpeedsState,
-  action: BaseAction<number[]>
+  action: BaseAction<SpeedsForTrain>
 ): AllSpeedsState => {
   return {
     ...state,

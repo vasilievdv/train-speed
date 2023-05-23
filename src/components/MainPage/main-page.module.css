@@ -1,6 +1,7 @@
 .mainWrapper {
   position: absolute;
   inset: 40px;
+  text-align: center;
 }
 
 .row {
@@ -8,6 +9,9 @@
 }
 
 .col {
-  overflow-x: scroll;
   height: inherit;
 }
+
+.col1 {
+  overflow-x: scroll;
+} 

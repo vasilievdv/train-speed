@@ -1,6 +1,6 @@
-import React, { memo, MouseEvent } from 'react';
+import React, { MouseEvent } from 'react';
 import { useAppDispatch } from '../../hooks';
-import { Table as BaseTable } from 'react-bootstrap';
+import { Table } from 'react-bootstrap';
 import { TrainSpeedTypes } from '../MainPage';
 import { addAllSpeeds } from './actions';
 import styles from './table.module.css';
@@ -10,22 +10,22 @@ type Props = {
   data: TrainSpeedTypes[];
 };
 
-function Table(props: Props) {
+function TrainsTable(props: Props) {
   const { columnName, data } = props;
 
   const dispatch = useAppDispatch();
 
   function onClickName(event: MouseEvent<HTMLElement>) {
     if (event.target instanceof HTMLAnchorElement) {
-      const speedLimits = data[Number(event.target.id)].speedLimits;
-      const pureSpeedLimits = speedLimits.map((s) => s.speedLimit);
-      console.log(pureSpeedLimits);
-      dispatch(addAllSpeeds(pureSpeedLimits));
+      const { speedLimits, name } = data[Number(event.target.id)];
+      const speeds = speedLimits.map((s) => s.speedLimit);
+      const speedsForCurrentTrain = {speeds, name}
+      dispatch(addAllSpeeds(speedsForCurrentTrain));
     }
   }
 
   return (
-    <BaseTable striped size="sm">
+    <Table striped size="sm">
       <thead>
         <tr>
           <th>#</th>
@@ -38,7 +38,6 @@ function Table(props: Props) {
             <tr key={id}>
               <td>{id + 1}</td>
               <td>
-                <form>
                   <a
                     href="#"
                     className={styles.link}
@@ -47,14 +46,13 @@ function Table(props: Props) {
                   >
                     {r.name}
                   </a>
-                </form>
               </td>
             </tr>
           );
         })}
       </tbody>
-    </BaseTable>
+    </Table>
   );
 }
 
-export default memo(Table);
+export default TrainsTable;

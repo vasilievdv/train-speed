@@ -1,0 +1,19 @@
+.notValid {
+  font-size: small;
+  color: red;
+  background: white;
+  margin-top: -49px;
+  padding: 5px;
+  border-radius: 5px;
+}
+
+.tableWrapper {
+  height: inherit;
+  overflow: scroll;
+}
+
+.speedInput {
+  position: sticky;
+  opacity: 0.97;
+  margin-top: -30px;
+}

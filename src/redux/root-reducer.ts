@@ -1,7 +1,7 @@
 import { combineReducers } from 'redux';
 
 import { TrainSpeedReducer, TrainSpeedState } from '../components/MainPage';
-import { AllSpeedsReducer, AllSpeedsState } from '../components/Table';
+import { AllSpeedsReducer, AllSpeedsState } from '../components/TrainsTable';
 
 const rootReducer = combineReducers({
   trainSpeed: TrainSpeedReducer,
