@@ -1,0 +1,13 @@
+.mainWrapper {
+  position: absolute;
+  inset: 40px;
+}
+
+.row {
+  height: 100%;
+}
+
+.col {
+  overflow-x: scroll;
+  height: inherit;
+}

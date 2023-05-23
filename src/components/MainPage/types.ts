@@ -5,6 +5,17 @@ export const types = {
   RESET_TRAIN_SPEED_ERROR: 'RESET_TRAIN_SPEED_ERROR',
 };
 
+export interface SpeedLimitsTypes {
+  name: string;
+  speedLimit: number;
+}
+
+export interface TrainSpeedTypes {
+  name: string;
+  description: string;
+  speedLimits: SpeedLimitsTypes[];
+}
+
 export interface TrainSpeedState {
-  trainSpeed: StoreFetchState<[]>;
+  trainSpeed: StoreFetchState<TrainSpeedTypes[]>;
 }
