@@ -65,6 +65,12 @@ function SpeedsTable() {
     dispatch(editSpeedAction(thinSpeedLimits));
   }
 
+  function onClickLog() {
+    const speedLimits = speeds.map((s, id) => { return { speedLimit: s.speed, name: `Скорость №${id}` } })
+    const storageSpeeds = { name, description: '', speedLimits };
+    console.log(storageSpeeds);
+  }
+
   useEffect(() => {
     setSpeedLimits(speeds);
   }, [speeds]);
@@ -155,7 +161,7 @@ function SpeedsTable() {
               </Form>
             </Col>
             <Col sm={3}>
-              <Button variant="success" id="button-addon1" size="sm">
+              <Button variant="success" id="button-addon1" size="sm" onClick={onClickLog}>
                 Сохранить
               </Button>
             </Col>
