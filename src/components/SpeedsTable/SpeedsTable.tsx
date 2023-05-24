@@ -1,22 +1,24 @@
 import React, { useRef, useState, ChangeEvent, useEffect } from 'react';
 import { useAppSelector, useAppDispatch } from '../../hooks';
 import { Table, Form, InputGroup, Button, Row, Col } from 'react-bootstrap';
-import { addNewSpeedAction, setSpeedEditAction } from './actions';
-import styles from './speeds.module.css';
+import { addNewSpeedAction, setSpeedEditAction, editSpeedAction } from './actions';
 import { BsFillXSquareFill, BsFillPencilFill } from 'react-icons/bs';
+import { SpeedRowType } from '../TrainsTable';
+import styles from './speeds.module.css';
 
 function SpeedsTable() {
-  const [validated, setValidated] = useState(false);
-  const [newSpeedLimit, setNewSpeedLimit] = useState(0);
   const { speeds, name } = useAppSelector(
     (state) => state.allSpeeds.allSpeeds.data
   );
+  const [speedLimits, setSpeedLimits] = useState<SpeedRowType[]>([]);
+  const [validated, setValidated] = useState(false);
+  const [newSpeedLimit, setNewSpeedLimit] = useState(0);
   const speedInputRef = useRef<HTMLFormElement>(null);
   const dispatch = useAppDispatch();
 
-  const onChangeSpeed = (e: ChangeEvent<HTMLInputElement>) => {
+  function onChangeSpeed(e: ChangeEvent<HTMLInputElement>) {
     setNewSpeedLimit(+e.target.value);
-  };
+  }
 
   function onSubmitNewSpeedLimit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -29,9 +31,30 @@ function SpeedsTable() {
     }
   }
 
-  const onClickEdit = (id: number) => {
-    dispatch(setSpeedEditAction(id))
-  };
+  function onSubmitEditSpeed(event: React.FormEvent<HTMLFormElement>, id: number) {
+    event.preventDefault();
+    const editedSpeedLimits = [...speedLimits];
+    editedSpeedLimits[id].isEdit = false;
+    dispatch(editSpeedAction(editedSpeedLimits));
+  }
+
+  function onChangeEditSpeed(e: ChangeEvent<HTMLInputElement>, id: number) {
+    const updateSpeedLimits = speedLimits.map((s, i) => {
+      if (id === i) {
+        return { ...s, speed: +e.target.value };
+      }
+      return s;
+    });
+    setSpeedLimits(updateSpeedLimits);
+  }
+
+  function onClickEdit(id: number) {
+    dispatch(setSpeedEditAction(id));
+  }
+
+  useEffect(() => {
+    setSpeedLimits(speeds);
+  }, [speeds]);
 
   return (
     <>
@@ -45,11 +68,27 @@ function SpeedsTable() {
             </tr>
           </thead>
           <tbody>
-            {speeds.map((s, id) => {
+            {speedLimits.map((s, id) => {
               return (
                 <tr key={id}>
                   <td>{`Скорость №${id}`}</td>
-                  <td>{s.speed}</td>
+                  {s.isEdit ? (
+                    <td>
+                      <form onSubmit={(e: React.FormEvent<HTMLFormElement>)=>onSubmitEditSpeed(e, id)} id={String(id)}>
+                        <input
+                          value={s.speed}
+                          type="text"
+                          size={4}
+                          className={styles.editInput}
+                          onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                            onChangeEditSpeed(e, id)
+                          }
+                        ></input>
+                      </form>
+                    </td>
+                  ) : (
+                    <td>{s.speed}</td>
+                  )}
                   <td>
                     <a
                       href="#"
