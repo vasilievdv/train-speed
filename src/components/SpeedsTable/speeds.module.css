@@ -17,3 +17,9 @@
   opacity: 0.97;
   margin-top: -30px;
 }
+
+.btn {
+  text-decoration: none;
+  color: rgb(41, 41, 41);
+  margin: 0 0.1rem
+}

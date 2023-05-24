@@ -1,7 +1,7 @@
-import React, { useRef, useState, ChangeEvent } from 'react';
+import React, { useRef, useState, ChangeEvent, useEffect } from 'react';
 import { useAppSelector, useAppDispatch } from '../../hooks';
 import { Table, Form, InputGroup, Button, Row, Col } from 'react-bootstrap';
-import { addNewSpeedAction } from './actions';
+import { addNewSpeedAction, setSpeedEditAction } from './actions';
 import styles from './speeds.module.css';
 import { BsFillXSquareFill, BsFillPencilFill } from 'react-icons/bs';
 
@@ -21,13 +21,17 @@ function SpeedsTable() {
   function onSubmitNewSpeedLimit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     if (Number.isInteger(newSpeedLimit) && newSpeedLimit > 0) {
-      dispatch(addNewSpeedAction(newSpeedLimit));
+      dispatch(addNewSpeedAction({ speed: newSpeedLimit, isEdit: false }));
       speedInputRef.current?.reset();
       setValidated(false);
     } else {
       setValidated(true);
     }
   }
+
+  const onClickEdit = (id: number) => {
+    dispatch(setSpeedEditAction(id))
+  };
 
   return (
     <>
@@ -45,10 +49,18 @@ function SpeedsTable() {
               return (
                 <tr key={id}>
                   <td>{`Скорость №${id}`}</td>
-                  <td>{s}</td>
+                  <td>{s.speed}</td>
                   <td>
-                    <BsFillPencilFill />{' '}
-                    <BsFillXSquareFill />
+                    <a
+                      href="#"
+                      className={styles.btn}
+                      onClick={() => onClickEdit(id)}
+                    >
+                      <BsFillPencilFill />
+                    </a>
+                    <a href="#" className={styles.btn}>
+                      <BsFillXSquareFill />
+                    </a>
                   </td>
                 </tr>
               );
@@ -61,18 +73,14 @@ function SpeedsTable() {
           <Row>
             <Col sm={9}>
               <Form onSubmit={onSubmitNewSpeedLimit} ref={speedInputRef}>
-                  {validated && (
-                    <div className={styles.notValid}>
-                      Cкоростное ограничение должно быть положительным целым
-                      числом.
-                    </div>
-                  )}
+                {validated && (
+                  <div className={styles.notValid}>
+                    Cкоростное ограничение должно быть положительным целым
+                    числом.
+                  </div>
+                )}
                 <InputGroup className="mb-3" size="sm">
-                  <Button
-                    variant="secondary"
-                    id="button-addon2"
-                    type="submit"
-                  >
+                  <Button variant="secondary" id="button-addon2" type="submit">
                     Добавить
                   </Button>
                   <Form.Control

@@ -1,11 +1,11 @@
-import { AllSpeedsState } from '../../TrainsTable';
+import { AllSpeedsState, SpeedRowType } from '../../TrainsTable';
 
 export const addNewSpeed = (
   state: AllSpeedsState,
-  action: BaseAction<number>
+  action: BaseAction<SpeedRowType>
 ): AllSpeedsState => {
   const curentTrainSpeeds = { ...state.allSpeeds.data };
-  curentTrainSpeeds.speeds = [...curentTrainSpeeds.speeds, action.payload!].sort((a, b) => a - b);
+  curentTrainSpeeds.speeds = [...curentTrainSpeeds.speeds, action.payload!].sort((a, b) => a.speed - b.speed);
   return {
     ...state,
     allSpeeds: {

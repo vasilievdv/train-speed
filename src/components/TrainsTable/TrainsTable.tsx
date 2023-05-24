@@ -1,4 +1,4 @@
-import React, { MouseEvent } from 'react';
+import React from 'react';
 import { useAppDispatch } from '../../hooks';
 import { Table } from 'react-bootstrap';
 import { TrainSpeedTypes } from '../MainPage';
@@ -15,13 +15,13 @@ function TrainsTable(props: Props) {
 
   const dispatch = useAppDispatch();
 
-  function onClickName(event: MouseEvent<HTMLElement>) {
-    if (event.target instanceof HTMLAnchorElement) {
-      const { speedLimits, name } = data[Number(event.target.id)];
-      const speeds = speedLimits.map((s) => s.speedLimit);
-      const speedsForCurrentTrain = {speeds, name}
+  function onClickName(id: number) {
+      const { speedLimits, name } = data[id];
+      const speeds = speedLimits.map((s) => {
+        return { speed: s.speedLimit, isEdit: false };
+      });
+      const speedsForCurrentTrain = { speeds, name };
       dispatch(addAllSpeeds(speedsForCurrentTrain));
-    }
   }
 
   return (
@@ -38,14 +38,13 @@ function TrainsTable(props: Props) {
             <tr key={id}>
               <td>{id + 1}</td>
               <td>
-                  <a
-                    href="#"
-                    className={styles.link}
-                    id={String(id)}
-                    onClick={onClickName}
-                  >
-                    {r.name}
-                  </a>
+                <a
+                  href="#"
+                  className={styles.link}
+                  onClick={() => onClickName(id)}
+                >
+                  {r.name}
+                </a>
               </td>
             </tr>
           );
