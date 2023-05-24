@@ -10,6 +10,7 @@
 .tableWrapper {
   height: inherit;
   overflow: scroll;
+  padding-bottom: 30px;
 }
 
 .speedInput {

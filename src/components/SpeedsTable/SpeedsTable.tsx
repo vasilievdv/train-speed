@@ -1,7 +1,11 @@
 import React, { useRef, useState, ChangeEvent, useEffect } from 'react';
 import { useAppSelector, useAppDispatch } from '../../hooks';
 import { Table, Form, InputGroup, Button, Row, Col } from 'react-bootstrap';
-import { addNewSpeedAction, setSpeedEditAction, editSpeedAction } from './actions';
+import {
+  addNewSpeedAction,
+  setSpeedEditAction,
+  editSpeedAction,
+} from './actions';
 import { BsFillXSquareFill, BsFillPencilFill } from 'react-icons/bs';
 import { SpeedRowType } from '../TrainsTable';
 import styles from './speeds.module.css';
@@ -31,7 +35,10 @@ function SpeedsTable() {
     }
   }
 
-  function onSubmitEditSpeed(event: React.FormEvent<HTMLFormElement>, id: number) {
+  function onSubmitEditSpeed(
+    event: React.FormEvent<HTMLFormElement>,
+    id: number
+  ) {
     event.preventDefault();
     const editedSpeedLimits = [...speedLimits];
     editedSpeedLimits[id].isEdit = false;
@@ -52,6 +59,12 @@ function SpeedsTable() {
     dispatch(setSpeedEditAction(id));
   }
 
+  function onClickDelete(id: number) {
+    const thinSpeedLimits = speedLimits.filter((_, i) => i !== id);
+    setSpeedLimits(thinSpeedLimits);
+    dispatch(editSpeedAction(thinSpeedLimits));
+  }
+
   useEffect(() => {
     setSpeedLimits(speeds);
   }, [speeds]);
@@ -59,7 +72,7 @@ function SpeedsTable() {
   return (
     <>
       <div className={styles.tableWrapper}>
-        <Table striped size="sm">
+        <Table striped size="sm" className={styles.table}>
           <thead>
             <tr>
               <th>{name || 'Поезд не выбран'}</th>
@@ -74,7 +87,12 @@ function SpeedsTable() {
                   <td>{`Скорость №${id}`}</td>
                   {s.isEdit ? (
                     <td>
-                      <form onSubmit={(e: React.FormEvent<HTMLFormElement>)=>onSubmitEditSpeed(e, id)} id={String(id)}>
+                      <form
+                        onSubmit={(e: React.FormEvent<HTMLFormElement>) =>
+                          onSubmitEditSpeed(e, id)
+                        }
+                        id={String(id)}
+                      >
                         <input
                           value={s.speed}
                           type="text"
@@ -97,7 +115,11 @@ function SpeedsTable() {
                     >
                       <BsFillPencilFill />
                     </a>
-                    <a href="#" className={styles.btn}>
+                    <a
+                      href="#"
+                      className={styles.btn}
+                      onClick={() => onClickDelete(id)}
+                    >
                       <BsFillXSquareFill />
                     </a>
                   </td>
