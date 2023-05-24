@@ -10,4 +10,4 @@ In the project directory, you can run:
 
 ### Live Demo:
 
-train-speed.netlify.app
+https://train-speed.netlify.app
